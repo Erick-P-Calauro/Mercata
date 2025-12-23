@@ -1,6 +1,5 @@
 package com.mercata.inventarium.Controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,12 +31,10 @@ public class VendorController {
     @Autowired
     VendorService vendorService;
 
-    @PostMapping("/save")
+    @PostMapping("/save") // Talvez não seja utilizado por conta dos eventos que virão do serviço de usuários
     public ResponseEntity<VendorResponse> saveVendor(@RequestBody VendorCreate vendorCreate ) {
         
         Vendor vendor = mapper.map(vendorCreate, Vendor.class);
-        vendor.setVendor_id(UUID.randomUUID()); // Manual UUID assignment
-        vendor.setVendor_stocks(new ArrayList<>()); // Empty stock list
         vendor = vendorService.saveVendor(vendor);
 
         VendorResponse response = mapper.map(vendor, VendorResponse.class);

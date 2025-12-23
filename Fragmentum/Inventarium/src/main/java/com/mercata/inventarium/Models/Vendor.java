@@ -22,7 +22,7 @@ public class Vendor {
     @MongoId
     @Field(targetType = FieldType.STRING)
     private UUID vendor_id;
-
+    
     private String vendor_name;
 
     private String vendor_description;
