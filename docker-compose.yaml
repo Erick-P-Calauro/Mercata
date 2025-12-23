@@ -1,0 +1,16 @@
+services:
+  emissarius:
+    image: rabbitmq:4.2.2-management
+    ports:
+      - 15672:15672
+      - 5672:5672
+  servandi:
+    image: mongo
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+      
+  # inventarium:
+  #  context: ./Fragmentum/Invetarium
