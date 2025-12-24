@@ -19,11 +19,11 @@ import com.mercata.inventarium.Catalog.DTOs.Product.ProductCreate;
 import com.mercata.inventarium.Catalog.DTOs.Product.ProductResponse;
 import com.mercata.inventarium.Catalog.Models.Product;
 import com.mercata.inventarium.Catalog.Services.ProductService;
-import com.mercata.inventarium.Exceptions.MissingValueException;
+import com.mercata.inventarium.Exceptions.NotValidInputException;
 import com.mercata.inventarium.Exceptions.NotFoundException;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/catalog/product")
 public class ProductController {
     
     @Autowired
@@ -33,7 +33,7 @@ public class ProductController {
     ModelMapper mapper;
 
     @PostMapping("/save")
-    public ResponseEntity<ProductResponse> saveProcut(@RequestBody ProductCreate productCreate) throws MissingValueException, NotFoundException {
+    public ResponseEntity<ProductResponse> saveProcut(@RequestBody ProductCreate productCreate) throws NotValidInputException, NotFoundException {
 
         Product product = mapper.map(productCreate, Product.class);
         product = productService.saveProcut(product);
@@ -62,7 +62,7 @@ public class ProductController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ProductResponse> updateProduct(@PathVariable("id") UUID product_id, @RequestBody ProductCreate productCreate) throws NotFoundException, MissingValueException {
+    public ResponseEntity<ProductResponse> updateProduct(@PathVariable("id") UUID product_id, @RequestBody ProductCreate productCreate) throws NotFoundException, NotValidInputException {
 
         Product product = mapper.map(productCreate, Product.class);
         product.setProduct_id(product_id);

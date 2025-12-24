@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 
-import com.mercata.inventarium.Exceptions.MissingValueException;
+import com.mercata.inventarium.Exceptions.NotValidInputException;
 import com.mercata.inventarium.Exceptions.NotFoundException;
 import com.mercata.inventarium.Vendors.DTOs.Vendor.VendorPayload;
 import com.mercata.inventarium.Vendors.Models.Vendor;
@@ -77,14 +77,14 @@ public class VendorService {
     }
 
     // Cadastro de vendor por mensageria
-    public void processVendorCreatedPayload(Message<VendorPayload> vendorPayload) throws MissingValueException {
+    public void processVendorCreatedPayload(Message<VendorPayload> vendorPayload) throws NotValidInputException {
         VendorPayload payload = vendorPayload.getPayload();
 
         if( payload.getVendor_id().equals(null) || 
             payload.getVendor_name().equals(null) || 
             payload.getVendor_name().length() < 3
         ) {
-            throw new MissingValueException("Valores requeridos para criação de vendor estão ausentes ou inválidos.");
+            throw new NotValidInputException("Valores requeridos para criação de vendor estão ausentes ou inválidos.");
         }
 
         Optional<Vendor> foundVendor = vendorRepository.findById(payload.getVendor_id());

@@ -12,8 +12,8 @@ public class ExceptionHandlerController {
         return ResponseEntity.status(404).body(new GenericErrorResponse(ex.getMessage()));
     }
 
-    @ExceptionHandler(MissingValueException.class)
-    public ResponseEntity<Object> handleMissingValue(MissingValueException ex) {
+    @ExceptionHandler(NotValidInputException.class)
+    public ResponseEntity<Object> handleMissingValue(NotValidInputException ex) {
         return ResponseEntity.badRequest().body(new GenericErrorResponse(ex.getMessage()));
     }
     

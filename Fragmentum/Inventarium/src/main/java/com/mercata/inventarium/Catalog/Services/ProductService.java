@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.mercata.inventarium.Catalog.Models.Product;
 import com.mercata.inventarium.Catalog.Repository.ProductRepository;
-import com.mercata.inventarium.Exceptions.MissingValueException;
+import com.mercata.inventarium.Exceptions.NotValidInputException;
 import com.mercata.inventarium.Exceptions.NotFoundException;
 import com.mercata.inventarium.Vendors.Models.Vendor;
 import com.mercata.inventarium.Vendors.Services.VendorService;
@@ -20,12 +20,12 @@ public class ProductService {
     @Autowired
     ProductRepository productRepository;
 
-    // Razão : 
-    // O Produto é vinculado a um usuário e é necessário saber se o vendedor existe.
+    // Motivos : 
+    // - Verificar a existência de um vendedor para cadastrar um novo produto vinculado a ele.
     @Autowired
     VendorService vendorService;
 
-    public Product saveProcut(Product product) throws MissingValueException, NotFoundException {
+    public Product saveProcut(Product product) throws NotValidInputException, NotFoundException {
     
         if(!vendorService.verifyVendorExistence(product.getVendor().getVendor_id())) {
             throw new NotFoundException("Vendedor de UUID " + product.getVendor().getVendor_id() + " não foi encontrado.");
@@ -55,7 +55,7 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Product updateProduct(Product product) throws NotFoundException, MissingValueException {
+    public Product updateProduct(Product product) throws NotFoundException, NotValidInputException {
     
         Optional<Product> foundProduct = productRepository.findById(product.getProduct_id());
 
