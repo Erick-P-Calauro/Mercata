@@ -2,6 +2,8 @@ package com.mercata.inventarium.Models;
 
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -20,6 +22,7 @@ import lombok.Setter;
 public class Vendor {
     
     @MongoId
+    @Indexed
     @Field(targetType = FieldType.STRING)
     private UUID vendor_id;
     

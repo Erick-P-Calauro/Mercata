@@ -1,7 +1,5 @@
 package com.mercata.inventarium.DTO.Product;
 
-import java.util.UUID;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,10 +9,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class ProductCreate {
-
+public class ProductUpdate {
+    
     private String product_name; 
-    private UUID vendor_id;
     private String product_description;
     private double product_price;
 

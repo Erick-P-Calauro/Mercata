@@ -66,14 +66,14 @@ public class VendorService {
         return vendorRepository.save(vendor);
     }
 
-    public void deleteVendor(Vendor vendor) throws NotFoundException {
-        Optional<Vendor> foundVendor = vendorRepository.findById(vendor.getVendor_id());
+    public void deleteVendor(UUID vendor_id) throws NotFoundException {
+        Optional<Vendor> foundVendor = vendorRepository.findById(vendor_id);
 
         if(foundVendor.isEmpty()) {
-            throw new NotFoundException("Vendedor de UUID " + vendor.getVendor_id() + " não encontrado.");
+            throw new NotFoundException("Vendedor de UUID " + vendor_id + " não encontrado.");
         }
 
-        vendorRepository.delete(vendor);
+        vendorRepository.delete(foundVendor.get());
     }
 
     // Cadastro de vendor por mensageria
@@ -100,6 +100,17 @@ public class VendorService {
     
         vendorRepository.save(vendor);
         return;
+    }
+
+    public boolean verifyVendorExistence(UUID vendor_id) {
+
+        Optional<Vendor> vendor = vendorRepository.findById(vendor_id);
+
+        if(vendor.isPresent()) {
+            return true;
+        }
+
+        return false;
     }
 
 }

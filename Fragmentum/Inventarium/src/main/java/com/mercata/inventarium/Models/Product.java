@@ -25,7 +25,7 @@ public class Product {
     private UUID product_id;
 
     @DBRef
-    private Vendor vendor_id;
+    private Vendor vendor;
 
     private String product_name;
 

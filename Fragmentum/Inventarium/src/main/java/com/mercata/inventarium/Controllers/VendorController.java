@@ -73,8 +73,7 @@ public class VendorController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Object> deleteVendor(@PathVariable("id") UUID vendor_id) throws NotFoundException {
-        Vendor vendor = vendorService.getVendorById(vendor_id);
-        vendorService.deleteVendor(vendor);
+        vendorService.deleteVendor(vendor_id);
 
         return ResponseEntity.status(204).build();
     }
