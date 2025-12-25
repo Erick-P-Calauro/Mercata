@@ -56,10 +56,8 @@ public class ProductService {
     }
 
     public Product updateProduct(Product product) throws NotFoundException, NotValidInputException {
-    
-        Optional<Product> foundProduct = productRepository.findById(product.getProduct_id());
 
-        if(foundProduct.isEmpty()) {
+        if(!productRepository.existsById(product.getProduct_id())) {
             throw new NotFoundException("Produto de UUID " + product.getProduct_id() + " não foi encontrado.");
         }
 
@@ -79,6 +77,10 @@ public class ProductService {
 
         productRepository.delete(foundProduct.get());
         return;
+    }
+
+    public boolean verifyProductExistence(UUID product_id) {
+        return productRepository.existsById(product_id);
     }
 
 }

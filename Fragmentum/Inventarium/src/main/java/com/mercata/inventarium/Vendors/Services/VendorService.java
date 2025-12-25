@@ -57,9 +57,8 @@ public class VendorService {
     }
 
     public Vendor updateVendor(Vendor vendor) throws NotFoundException {
-        Optional<Vendor> foundVendor = vendorRepository.findById(vendor.getVendor_id());
-
-        if(foundVendor.isEmpty()) {
+        
+        if(!vendorRepository.existsById(vendor.getVendor_id())) {
             throw new NotFoundException("Vendedor de UUID " + vendor.getVendor_id() + " não encontrado.");
         }
 
@@ -87,10 +86,8 @@ public class VendorService {
             throw new NotValidInputException("Valores requeridos para criação de vendor estão ausentes ou inválidos.");
         }
 
-        Optional<Vendor> foundVendor = vendorRepository.findById(payload.getVendor_id());
-
         // Evento duplicado de criação de vendedores.
-        if(foundVendor.isPresent()) {
+        if(vendorRepository.existsById(payload.getVendor_id())) {
             return;
         }
 
@@ -103,14 +100,7 @@ public class VendorService {
     }
 
     public boolean verifyVendorExistence(UUID vendor_id) {
-
-        Optional<Vendor> vendor = vendorRepository.findById(vendor_id);
-
-        if(vendor.isPresent()) {
-            return true;
-        }
-
-        return false;
+        return vendorRepository.existsById(vendor_id);
     }
 
 }

@@ -15,14 +15,13 @@ public class MessageController {
     @Autowired
     VendorService vendorService;
 
-    @RabbitListener(queues = MessagingConfiguration.ORDER_QUEUE)
-    public void listenOrderQueue(String in)  {
-        System.out.println("ORDER QUEUE MESSAGE : " + in);
-    }
-
     @RabbitListener(queues = MessagingConfiguration.VENDOR_QUEUE)
     public void listenVendorQueue(Message<VendorPayload> vendorPayload) throws NotValidInputException {
-        vendorService.processVendorCreatedPayload(vendorPayload);
+        try {
+            vendorService.processVendorCreatedPayload(vendorPayload);
+        }catch(Exception e) {
+            System.out.println("[VENDOR QUEUE LISTENER] " + e.getMessage());
+        }
     }
 
 }

@@ -2,6 +2,8 @@ package com.mercata.inventarium.Catalog.Models;
 
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -29,6 +31,7 @@ public class Product {
     @DBRef
     private Vendor vendor;
 
+    @Indexed(unique = true)
     private String product_name;
 
     private String product_description;

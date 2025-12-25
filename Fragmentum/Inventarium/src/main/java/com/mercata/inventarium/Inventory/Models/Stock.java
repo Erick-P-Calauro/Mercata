@@ -1,7 +1,11 @@
 package com.mercata.inventarium.Inventory.Models;
 
 import java.util.UUID;
+
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import com.mercata.inventarium.Catalog.Models.Product;
@@ -20,10 +24,13 @@ import lombok.Setter;
 public class Stock {
     
     @MongoId
+    @Field(targetType = FieldType.STRING)
     private UUID stock_id;
-
+    
+    @DBRef
     private Product stock_product;
 
+    @DBRef
     private Vendor stock_vendor;
 
     private double stock_quantity;

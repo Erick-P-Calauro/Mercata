@@ -36,4 +36,8 @@ public class Vendor {
     @DBRef
     private List<Stock> vendor_stocks;
 
+    public Vendor(UUID vendor_id){
+        this.vendor_id = vendor_id;
+    }
+
 }

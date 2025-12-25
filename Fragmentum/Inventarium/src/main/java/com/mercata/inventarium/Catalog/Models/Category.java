@@ -25,6 +25,7 @@ public class Category {
     @Field(targetType = FieldType.STRING)
     private UUID category_id;
 
+    @Indexed(unique = true)
     private String category_name;
 
 }
