@@ -22,6 +22,7 @@ public class StockService {
 
     // Motivo : 
     // - Verificar a existência do produto do estoque para cadastro.
+    // - Atualizar o produto do estoque
     @Autowired
     ProductService productService;
 
@@ -94,12 +95,12 @@ public class StockService {
 
         // Valores não atualizáveis
         stock.setStock_vendor(oldStock.getStock_vendor());
-        stock.setStock_available(oldStock.isStock_available());
         stock.setStock_id(stock_id);
 
         // Valores atualizáveis
         // stock_quantity
         stock.setStock_product(productService.getProductById(product_id));
+        stock.setStock_available(false);
         
         return stockRepository.save(stock);
     }
@@ -119,5 +120,6 @@ public class StockService {
     // validStockQuantity
     // activateStock
     // list with pagination
+    
     // list by categories and vendors
 }

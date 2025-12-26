@@ -32,7 +32,7 @@ public class VendorService {
         vendor.setVendor_id(UUID.randomUUID());
 
         // Preenchendo valor padrão de vendor_description;
-        if(vendor.getVendor_description().equals(null) || vendor.getVendor_description().length() == 0) {
+        if(vendor.getVendor_description() == null || vendor.getVendor_description().length() == 0) {
             vendor.setVendor_description("Vendedor em Mercata.");
         }
 
@@ -79,8 +79,8 @@ public class VendorService {
     public void processVendorCreatedPayload(Message<VendorPayload> vendorPayload) throws NotValidInputException {
         VendorPayload payload = vendorPayload.getPayload();
 
-        if( payload.getVendor_id().equals(null) || 
-            payload.getVendor_name().equals(null) || 
+        if( payload.getVendor_id() == null || 
+            payload.getVendor_name() == null || 
             payload.getVendor_name().length() < 3
         ) {
             throw new NotValidInputException("Valores requeridos para criação de vendor estão ausentes ou inválidos.");

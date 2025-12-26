@@ -65,4 +65,8 @@ public class CategoryService {
         return;
     }
 
+    public boolean verifyCategoryExistence(UUID category_id) {
+        return categoryRepository.existsById(category_id);
+    }
+
 }

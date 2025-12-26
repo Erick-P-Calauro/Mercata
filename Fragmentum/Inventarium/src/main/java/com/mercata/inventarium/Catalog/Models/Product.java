@@ -1,6 +1,7 @@
 package com.mercata.inventarium.Catalog.Models;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -43,7 +44,7 @@ public class Product {
     private List<Category> categories;
 
     @Nullable
-    private Object attributes;
+    private Map<String, String> attributes;
 
     public Product(UUID product_id) {
         this.product_id = product_id;

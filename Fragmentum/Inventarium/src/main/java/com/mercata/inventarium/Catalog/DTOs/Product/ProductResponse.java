@@ -1,6 +1,10 @@
 package com.mercata.inventarium.Catalog.DTOs.Product;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+
+import com.mercata.inventarium.Catalog.DTOs.Category.CategoryResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,4 +22,7 @@ public class ProductResponse {
     private String product_name;
     private String product_description;
     private double product_price;
+    private List<CategoryResponse> categories;
+    private Map<String, String> attributes;
+
 }

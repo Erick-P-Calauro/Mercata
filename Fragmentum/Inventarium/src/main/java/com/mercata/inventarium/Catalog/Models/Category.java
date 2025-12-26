@@ -28,4 +28,8 @@ public class Category {
     @Indexed(unique = true)
     private String category_name;
 
+    public Category(UUID category_id) {
+        this.category_id = category_id;
+    }
+
 }

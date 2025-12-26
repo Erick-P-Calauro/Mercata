@@ -1,5 +1,6 @@
 package com.mercata.inventarium.Catalog.Services;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -7,6 +8,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mercata.inventarium.Catalog.Models.Category;
 import com.mercata.inventarium.Catalog.Models.Product;
 import com.mercata.inventarium.Catalog.Repository.ProductRepository;
 import com.mercata.inventarium.Exceptions.NotValidInputException;
@@ -25,10 +27,29 @@ public class ProductService {
     @Autowired
     VendorService vendorService;
 
+    // Motivos : 
+    // - Verificar a existência de categorias para cadastrar um novo produto.
+    @Autowired
+    CategoryService categoryService;
+
     public Product saveProcut(Product product) throws NotValidInputException, NotFoundException {
     
+        if(product.getProduct_name() == null || product.getProduct_name().length() < 3) {
+            throw  new NotValidInputException("O nome do produto deve estar presente e ter ao menos três caracteres.");
+        }
+
         if(!vendorService.verifyVendorExistence(product.getVendor().getVendor_id())) {
             throw new NotFoundException("Vendedor de UUID " + product.getVendor().getVendor_id() + " não foi encontrado.");
+        }
+
+        Iterator<Category> categories = product.getCategories().iterator();
+
+        while(product.getCategories().size() > 0 && categories.hasNext()) {
+            UUID nextCategoryId = categories.next().getCategory_id();
+
+            if(!categoryService.verifyCategoryExistence(nextCategoryId)) {
+                categories.remove();
+            }
         }
 
         if(product.getProduct_description().equals("") || product.getProduct_description().equals(null)) {
@@ -59,6 +80,17 @@ public class ProductService {
 
         if(!productRepository.existsById(product.getProduct_id())) {
             throw new NotFoundException("Produto de UUID " + product.getProduct_id() + " não foi encontrado.");
+        }
+
+
+        Iterator<Category> categories = product.getCategories().iterator();
+
+        while(product.getCategories().size() > 0 && categories.hasNext()) {
+            UUID nextCategoryId = categories.next().getCategory_id();
+
+            if(!categoryService.verifyCategoryExistence(nextCategoryId)) {
+                categories.remove();
+            }
         }
 
         Vendor product_vendor = getProductById(product.getProduct_id()).getVendor();

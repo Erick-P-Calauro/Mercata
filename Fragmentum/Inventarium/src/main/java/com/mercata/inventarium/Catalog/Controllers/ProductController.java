@@ -1,5 +1,6 @@
 package com.mercata.inventarium.Catalog.Controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mercata.inventarium.Catalog.DTOs.Product.ProductCreate;
 import com.mercata.inventarium.Catalog.DTOs.Product.ProductResponse;
+import com.mercata.inventarium.Catalog.Models.Category;
 import com.mercata.inventarium.Catalog.Models.Product;
 import com.mercata.inventarium.Catalog.Services.ProductService;
 import com.mercata.inventarium.Exceptions.NotValidInputException;
@@ -35,7 +37,12 @@ public class ProductController {
     @PostMapping("/save")
     public ResponseEntity<ProductResponse> saveProcut(@RequestBody ProductCreate productCreate) throws NotValidInputException, NotFoundException {
 
+        ArrayList<Category> product_categories = new ArrayList<>();
+        productCreate.getCategories_id().stream().forEach((cat_id) -> product_categories.add(new Category(cat_id))); 
+
         Product product = mapper.map(productCreate, Product.class);
+        product.setCategories(product_categories);
+
         product = productService.saveProcut(product);
 
         ProductResponse response = mapper.map(product, ProductResponse.class);
@@ -64,7 +71,11 @@ public class ProductController {
     @PutMapping("/update/{id}")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable("id") UUID product_id, @RequestBody ProductCreate productCreate) throws NotFoundException, NotValidInputException {
 
+        ArrayList<Category> product_categories = new ArrayList<>();
+        productCreate.getCategories_id().stream().forEach((cat_id) -> product_categories.add(new Category(cat_id))); 
+
         Product product = mapper.map(productCreate, Product.class);
+        product.setCategories(product_categories);
         product.setProduct_id(product_id);
 
         product = productService.updateProduct(product);
