@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +15,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mercata.inventarium.Catalog.Models.Product;
+import com.mercata.inventarium.Common.DTOs.Pagination;
 import com.mercata.inventarium.Exceptions.ForbiddenException;
 import com.mercata.inventarium.Exceptions.NotFoundException;
+import com.mercata.inventarium.Inventory.DTOs.PagStockResponse;
 import com.mercata.inventarium.Inventory.DTOs.StockCreate;
 import com.mercata.inventarium.Inventory.DTOs.StockResponse;
 import com.mercata.inventarium.Inventory.DTOs.StockUpdate;
@@ -54,9 +59,17 @@ public class StockController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<StockResponse>> listStocks() {
-        List<Stock> stocks = stockService.listStocks();
-        List<StockResponse> response = stocks.stream().map((stock) -> mapper.map(stock, StockResponse.class)).toList();
+    public ResponseEntity<PagStockResponse> listStocks(
+        @RequestParam(defaultValue = "0") int page_number,
+        @RequestParam(defaultValue = "10") int page_size
+    ) {
+        PageRequest pageable = PageRequest.of(page_number, page_size);
+        Page<Stock> stocks = stockService.listStocks(pageable);
+
+        Pagination pagination_response = new Pagination(stocks.getNumber(), stocks.getSize(), stocks.getNumberOfElements(), stocks.getTotalPages());
+        List<StockResponse> stocks_response = stocks.getContent().stream().map((stock) -> mapper.map(stock, StockResponse.class)).toList();
+
+        PagStockResponse response = new PagStockResponse(pagination_response, stocks_response);
 
         return ResponseEntity.status(200).body(response);
     }

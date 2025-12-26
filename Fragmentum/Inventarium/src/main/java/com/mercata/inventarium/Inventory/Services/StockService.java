@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.mercata.inventarium.Catalog.Services.ProductService;
@@ -63,6 +65,10 @@ public class StockService {
         return stockRepository.save(stock);
     }
 
+    public Page<Stock> listStocks(PageRequest pageable) {
+        return stockRepository.findAll(pageable);
+    }
+
     public List<Stock> listStocks() {
         return stockRepository.findAll();
     }
@@ -117,9 +123,20 @@ public class StockService {
         return;
     }
 
-    // validStockQuantity
-    // activateStock
-    // list with pagination
-    
+    public boolean activateStock(UUID stock_id) throws NotFoundException {
+
+        Stock stock = getStockById(stock_id);
+
+        if(stock.getStock_quantity() <= 0) {
+            return false;
+        }
+
+        stock.setStock_available(true);
+        stockRepository.save(stock);
+
+        return true;
+    }
+
     // list by categories and vendors
+    // validStockQuantity
 }

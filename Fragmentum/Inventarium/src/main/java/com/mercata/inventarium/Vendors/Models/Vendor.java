@@ -1,16 +1,12 @@
 package com.mercata.inventarium.Vendors.Models;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
-
-import com.mercata.inventarium.Inventory.Models.Stock;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,9 +28,6 @@ public class Vendor {
     private String vendor_name;
 
     private String vendor_description;
-
-    @DBRef
-    private List<Stock> vendor_stocks;
 
     public Vendor(UUID vendor_id){
         this.vendor_id = vendor_id;

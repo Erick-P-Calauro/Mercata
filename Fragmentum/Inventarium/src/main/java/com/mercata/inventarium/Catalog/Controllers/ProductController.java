@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,13 +16,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mercata.inventarium.Catalog.DTOs.Product.PagProductResponse;
 import com.mercata.inventarium.Catalog.DTOs.Product.ProductCreate;
 import com.mercata.inventarium.Catalog.DTOs.Product.ProductResponse;
 import com.mercata.inventarium.Catalog.Models.Category;
 import com.mercata.inventarium.Catalog.Models.Product;
 import com.mercata.inventarium.Catalog.Services.ProductService;
+import com.mercata.inventarium.Common.DTOs.Pagination;
 import com.mercata.inventarium.Exceptions.NotValidInputException;
 import com.mercata.inventarium.Exceptions.NotFoundException;
 
@@ -49,12 +54,19 @@ public class ProductController {
 
         return ResponseEntity.status(201).body(response);
     }
-
+    
     @GetMapping("/")
-    public ResponseEntity<List<ProductResponse>> listProducts() {
+    public ResponseEntity<PagProductResponse> listProducts(
+        @RequestParam(defaultValue = "0") int page_number, 
+        @RequestParam(defaultValue = "10") int page_size) {
         
-        List<Product> products = productService.listProducts();
-        List<ProductResponse> response = products.stream().map((p) -> mapper.map(p, ProductResponse.class)).toList();
+        PageRequest pagination = PageRequest.of(page_number, page_size);
+        Page<Product> products = productService.listProducts(pagination);
+
+        Pagination pagination_response = new Pagination(products.getNumber(), products.getSize(), products.getTotalElements(), products.getTotalPages());
+        List<ProductResponse> product_response = products.getContent().stream().map((product) -> mapper.map(product, ProductResponse.class)).toList();
+        
+        PagProductResponse response = new PagProductResponse(pagination_response, product_response);
 
         return ResponseEntity.status(200).body(response);
     }

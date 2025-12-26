@@ -1,6 +1,5 @@
 package com.mercata.inventarium.Vendors.Services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -37,7 +36,7 @@ public class VendorService {
         }
 
         // Valor padrão de vendor_stocks
-        vendor.setVendor_stocks(new ArrayList<>());
+        // vendor.setVendor_stocks(new ArrayList<>());
 
         return vendorRepository.save(vendor);
     }
@@ -93,7 +92,7 @@ public class VendorService {
 
         Vendor vendor = mapper.map(payload, Vendor.class);
         vendor.setVendor_description("Vendedor em Mercata.");
-        vendor.setVendor_stocks(new ArrayList<>());
+        // vendor.setVendor_stocks(new ArrayList<>());
     
         vendorRepository.save(vendor);
         return;

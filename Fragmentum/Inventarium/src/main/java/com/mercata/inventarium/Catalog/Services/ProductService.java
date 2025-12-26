@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.mercata.inventarium.Catalog.Models.Category;
@@ -76,6 +78,10 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    public Page<Product> listProducts(PageRequest pageable) {
+        return productRepository.findAll(pageable);
+    }
+
     public Product updateProduct(Product product) throws NotFoundException, NotValidInputException {
 
         if(!productRepository.existsById(product.getProduct_id())) {
@@ -114,5 +120,9 @@ public class ProductService {
     public boolean verifyProductExistence(UUID product_id) {
         return productRepository.existsById(product_id);
     }
+
+    // product by vendor
+    // product by category
+    // product by attributes
 
 }
