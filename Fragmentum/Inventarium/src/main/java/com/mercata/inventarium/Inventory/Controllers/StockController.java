@@ -49,7 +49,7 @@ public class StockController {
         
         Stock stock = mapper.map(stockCreate, Stock.class);
         stock.setStock_product(new Product(product_id));
-        stock.setStock_vendor(new Vendor(vendor_id));
+        stock.setVendor(new Vendor(vendor_id));
 
         stock = stockService.saveStock(stock);
 
@@ -59,12 +59,29 @@ public class StockController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<PagStockResponse> listStocks(
+    public ResponseEntity<PagStockResponse> listAllStocks(
         @RequestParam(defaultValue = "0") int page_number,
         @RequestParam(defaultValue = "10") int page_size
     ) {
         PageRequest pageable = PageRequest.of(page_number, page_size);
         Page<Stock> stocks = stockService.listStocks(pageable);
+
+        Pagination pagination_response = new Pagination(stocks.getNumber(), stocks.getSize(), stocks.getNumberOfElements(), stocks.getTotalPages());
+        List<StockResponse> stocks_response = stocks.getContent().stream().map((stock) -> mapper.map(stock, StockResponse.class)).toList();
+
+        PagStockResponse response = new PagStockResponse(pagination_response, stocks_response);
+
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @GetMapping("/vendor/{vendor_id}")
+    public ResponseEntity<PagStockResponse> listStocksByVendor(
+        @RequestParam(defaultValue = "0") int page_number,
+        @RequestParam(defaultValue = "10") int page_size,
+        @PathVariable("vendor_id") UUID vendor_id ) throws NotFoundException {
+
+        PageRequest pageable = PageRequest.of(page_number, page_size);
+        Page<Stock> stocks = stockService.listStocksByVendor(pageable, vendor_id);
 
         Pagination pagination_response = new Pagination(stocks.getNumber(), stocks.getSize(), stocks.getNumberOfElements(), stocks.getTotalPages());
         List<StockResponse> stocks_response = stocks.getContent().stream().map((stock) -> mapper.map(stock, StockResponse.class)).toList();

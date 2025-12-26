@@ -82,6 +82,15 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
+    public Page<Product> listProductsByVendor(PageRequest pageable, UUID vendor_id) throws NotFoundException {
+
+        if(!vendorService.verifyVendorExistence(vendor_id)) {
+            throw new NotFoundException("Vendedor com UUID " + vendor_id + " não foi encontrado.");
+        }
+
+        return productRepository.findAllByVendor(pageable, vendor_id);
+    }
+
     public Product updateProduct(Product product) throws NotFoundException, NotValidInputException {
 
         if(!productRepository.existsById(product.getProduct_id())) {
@@ -121,8 +130,6 @@ public class ProductService {
         return productRepository.existsById(product_id);
     }
 
-    // product by vendor
-    // product by category
-    // product by attributes
+    // product by vendor with category and attributes filter
 
 }

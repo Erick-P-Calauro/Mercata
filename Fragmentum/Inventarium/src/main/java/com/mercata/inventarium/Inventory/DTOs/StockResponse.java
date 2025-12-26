@@ -17,7 +17,7 @@ public class StockResponse {
 
     private StockProduct stock_product;
 
-    private UUID stock_vendor_id;
+    private UUID vendor_id;
 
     private double stock_quantity;
 

@@ -30,6 +30,7 @@ public class Product {
     private UUID product_id;
 
     @DBRef
+    @Indexed
     private Vendor vendor;
 
     @Indexed(unique = true)

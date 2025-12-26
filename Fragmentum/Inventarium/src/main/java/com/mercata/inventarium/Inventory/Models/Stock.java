@@ -2,6 +2,7 @@ package com.mercata.inventarium.Inventory.Models;
 
 import java.util.UUID;
 
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -31,7 +32,8 @@ public class Stock {
     private Product stock_product;
 
     @DBRef
-    private Vendor stock_vendor;
+    @Indexed
+    private Vendor vendor;
 
     private double stock_quantity;
 

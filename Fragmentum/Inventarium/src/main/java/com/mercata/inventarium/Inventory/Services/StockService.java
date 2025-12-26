@@ -36,7 +36,7 @@ public class StockService {
     public Stock saveStock(Stock stock) throws NotFoundException, ForbiddenException {
 
         UUID product_id = stock.getStock_product().getProduct_id();
-        UUID vendor_id = stock.getStock_vendor().getVendor_id();
+        UUID vendor_id = stock.getVendor().getVendor_id();
 
         if(!vendorService.verifyVendorExistence(vendor_id)) {
             throw new NotFoundException("Vendedor com UUID " + vendor_id + " não foi encontrado.");
@@ -73,6 +73,15 @@ public class StockService {
         return stockRepository.findAll();
     }
 
+    public Page<Stock> listStocksByVendor(PageRequest pageable, UUID vendor_id) throws NotFoundException {
+
+        if(!vendorService.verifyVendorExistence(vendor_id)) {
+            throw new NotFoundException("Vendedor com UUID " + vendor_id + " não foi encontrado.");
+        }
+
+        return stockRepository.findAllByVendor(pageable, vendor_id);
+    }
+
     public Stock getStockById(UUID stock_id) throws NotFoundException {
         Optional<Stock> stock = stockRepository.findById(stock_id);
 
@@ -100,7 +109,7 @@ public class StockService {
         Stock oldStock = foundStock.get();
 
         // Valores não atualizáveis
-        stock.setStock_vendor(oldStock.getStock_vendor());
+        stock.setVendor(oldStock.getVendor());
         stock.setStock_id(stock_id);
 
         // Valores atualizáveis
@@ -137,6 +146,9 @@ public class StockService {
         return true;
     }
 
-    // list by categories and vendors
+    // list by vendor
+    // list by vendor with categories and attributes
+    // list all with categories and attributes
+
     // validStockQuantity
 }

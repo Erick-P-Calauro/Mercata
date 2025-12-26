@@ -55,13 +55,30 @@ public class ProductController {
         return ResponseEntity.status(201).body(response);
     }
     
-    @GetMapping("/")
-    public ResponseEntity<PagProductResponse> listProducts(
+    @GetMapping("/admin/")
+    public ResponseEntity<PagProductResponse> listAllProducts(
         @RequestParam(defaultValue = "0") int page_number, 
         @RequestParam(defaultValue = "10") int page_size) {
         
         PageRequest pagination = PageRequest.of(page_number, page_size);
         Page<Product> products = productService.listProducts(pagination);
+
+        Pagination pagination_response = new Pagination(products.getNumber(), products.getSize(), products.getTotalElements(), products.getTotalPages());
+        List<ProductResponse> product_response = products.getContent().stream().map((product) -> mapper.map(product, ProductResponse.class)).toList();
+        
+        PagProductResponse response = new PagProductResponse(pagination_response, product_response);
+
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @GetMapping("/vendor/{vendor_id}")
+    public ResponseEntity<PagProductResponse> listVendorProducts(
+        @RequestParam(defaultValue = "0") int page_number, 
+        @RequestParam(defaultValue = "10") int page_size,
+        @PathVariable("vendor_id") UUID vendor_id) throws NotFoundException {
+        
+        PageRequest pagination = PageRequest.of(page_number, page_size);
+        Page<Product> products = productService.listProductsByVendor(pagination, vendor_id);
 
         Pagination pagination_response = new Pagination(products.getNumber(), products.getSize(), products.getTotalElements(), products.getTotalPages());
         List<ProductResponse> product_response = products.getContent().stream().map((product) -> mapper.map(product, ProductResponse.class)).toList();
